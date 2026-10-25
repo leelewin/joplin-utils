@@ -10,6 +10,7 @@ import { withProgress } from './withProgress'
 import { pathExists, remove } from 'fs-extra'
 import { get } from 'lodash-es'
 import { logger } from './logger'
+import { publishTransform } from './publishTransform'
 
 export async function publish(options: {
   token: string
@@ -83,6 +84,7 @@ export async function publish(options: {
       await convert({
         input: joplin.input({ type: 'plugin', tag: options.tag }),
         output: ssg_target.output(ssg_options),
+        transforms: [publishTransform()],
       }).on('generate', ({ content }) => {
         process.report({ message: `Processing ${content.name}` })
       })
